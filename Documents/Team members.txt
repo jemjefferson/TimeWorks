@@ -1,0 +1,10 @@
+Below is the list of people in your team. Feel free to add any contact information, availability, etc. to this file as you wish.
+Fall 2022 Team Charlie
+Your Slack Channel: #sa-c-fall22
+Your DevOps Organization: https://dev.azure.com/ntcsac/sac-fall22
+
+Jordan Jefferson
+
+Jacob Mahner
+
+Zach Johnson
