@@ -1,0 +1,55 @@
+﻿@model Employee;
+@{
+    Hour hour = Model.Hours.Where(h => h.TimeIn.Date == DateTime.Now.Date).OrderByDescending(h => h.TimeIn).FirstOrDefault();
+}
+<div class="content-container">
+    <div class="home">
+        <div class="full"><h2>Welcome!</h2></div>
+        <div class="full"><img class="home-logo" src="~/Images/timeworks.png" /></div>
+        <div class="full blue"><h3 id="CurrentTime"></h3></div>
+        <table class="clockin-table">
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                @if(ViewBag.ClockIn && ViewBag.Status == "Clocked Out"){
+                    <td rowspan="2" class="double"><button class="blue-back white" onclick="location.href = '/clock-in'">Clock In</button></td>
+                }
+                else{
+                    <td rowspan="2" class="double"><button class="blue-back white" style="opacity:0.6;" disabled>Clock In</button></td>
+                }
+                @if (ViewBag.Status != "Clocked In"){
+                    <td><button class="blue-back white" style="opacity:0.6;" type="button" disabled>Start Break</button></td>
+                } else{
+                    <td><button class="blue-back white" type="button" onclick="location.href = '/SelectBreak'">Start Break</button></td>
+                }
+                @if(ViewBag.ClockIn == false || ViewBag.Status == "Clocked Out" || ViewBag.Status == "On Break" || hour?.TimeIn.AddMinutes(1) > DateTime.Now){
+                    <td rowspan="2" class="double"><button class="blue-back white" style="opacity:0.6;" disabled>Clock Out</button></td>
+                }
+                else{
+                    <td rowspan="2" class="double"><button type="button" class="blue-back white" onclick="clockOut()">Clock Out</button></td>
+                }
+            </tr>
+            <tr>
+                @if (ViewBag.Status != "On Break"){
+                    <td><button class="blue-back white" style="opacity:0.6;" type="button" disabled>End Break</button></td>
+                } else{
+                    <td><button class="blue-back white" type="button" onclick="endBreak()">End Break</button></td>
+                }
+            </tr>
+        </table>
+    </div>
+</div>
+@section scripts{
+    <script>
+        let counter = 0;
+        setInterval(() => {
+            counter++;
+            if (counter > 30){
+                location.reload();
+            }
+        }, 1000); 
+    </script>
+}

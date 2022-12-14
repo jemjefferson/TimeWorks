@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Documents\NTC\SA\Team Project\sac-fall22\GroupProject\publish</_PublishTargetUrl>
+    <History>True|2022-11-29T22:39:50.0870558Z;True|2022-11-29T15:40:13.9487750-06:00;True|2022-11-29T15:14:36.5826388-06:00;True|2022-11-08T15:24:46.7879555-06:00;True|2022-09-27T16:36:08.8878556-05:00;True|2022-09-27T16:29:25.2078841-05:00;True|2022-09-25T12:17:37.3271007-05:00;True|2022-09-25T10:29:22.7982914-05:00;True|2022-09-25T09:32:52.5185953-05:00;True|2022-09-25T09:28:36.8428641-05:00;True|2022-09-22T15:42:47.7741797-05:00;True|2022-09-22T10:05:39.0791584-05:00;True|2022-08-30T11:47:30.2952729-05:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

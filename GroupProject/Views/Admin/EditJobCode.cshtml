@@ -1,0 +1,92 @@
+﻿@model JobCodeViewModel
+@{
+    List<SelectListItem> list = new SelectList(Model.JobCodes, "Id", "Id").ToList();
+    list.Insert(0, (new SelectListItem { Text = "--Select a Job Code ID--", Value = "0" }));
+    ViewData["SetupSelectList"] = list;
+}
+<h2 class="form-title">Edit Job Title</h2>
+<div class="form-horizontal">
+    <form class="form-area" method="post">
+        <div class="form-group">
+            <label asp-for="JobCode.Id"></label>
+            <select asp-for="JobCode.Id" asp-items="@list" class="form-control" onchange="jobCodeFieldUpdate()"></select>
+            <span asp-validation-for="JobCode.Id"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="JobCode.JobTitle"></label>
+            <input asp-for="JobCode.JobTitle" class="form-control" id="jobcode-jobtitle" />
+            <span asp-validation-for="JobCode.JobTitle"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="JobCode.StartingPay"></label>
+            <input asp-for="JobCode.StartingPay" placeholder="0.00" class="form-control" id="jobcode-startingpay" />
+            <span asp-validation-for="JobCode.StartingPay"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="JobCode.Department"></label>
+            <input asp-for="JobCode.Department" class="form-control" id="jobcode-department" />
+            <span asp-validation-for="JobCode.Department"></span>
+        </div>
+        <div asp-validation-summary="All"></div>
+        <p class="form-buttons">
+            <button type="submit" id="edit-jobcode-submit" class="btn btn-primary btn-submit" role="button" disabled>Edit</button>
+        </p>
+        <p class="form-buttons">
+            <a asp-controller="Admin" asp-action="" class="btn btn-primary btn-cancel">Cancel</a>
+        </p>
+    </form>
+</div>
+<table class="model-table">
+    <tr>
+        <th>Job Id</th>
+        <th>Job Title</th>
+        <th>Starting Pay</th>
+        <th>Department</th>
+        <th></th>
+    </tr>
+    @foreach (JobCode jc in Model.JobCodes)
+    {
+        <tr>
+            <td>@jc.Id</td>
+            <td>@jc.JobTitle</td>
+            <td>@jc.StartingPay</td>
+            <td>@jc.Department</td>
+        </tr>
+    }
+</table>
+<span class="space"></span>
+@section scripts{
+    <script>
+        function jobCodeFieldUpdate() {
+            var currentValue = document.getElementById("JobCode_Id").value;
+            if (currentValue != 0) {
+                var request = new XMLHttpRequest();
+                request.onreadystatechange = function () {
+                    if (this.readyState == 4) {
+                        var jobCode = JSON.parse(request.responseText);
+                        if (document.getElementById("JobCode_Id").value != 0) {
+                            document.getElementById("jobcode-jobtitle").value = jobCode.jobTitle;
+                            document.getElementById("jobcode-startingpay").value = jobCode.startingPay;
+                            document.getElementById("jobcode-department").value = jobCode.department;
+                            document.getElementById("edit-jobcode-submit").disabled = false;
+                        }
+                        else {
+                            document.getElementById("jobcode-jobtitle").value = "";
+                            document.getElementById("jobcode-startingpay").value = "";
+                            document.getElementById("jobcode-department").value = "";
+                            document.getElementById("edit-jobcode-submit").disabled = true;
+                        }
+                    }
+                };
+                request.open("GET", `/api/getjobcode?id=${currentValue}`, true);
+                request.send();
+            }
+            else {
+                document.getElementById("jobcode-jobtitle").value = "";
+                document.getElementById("jobcode-startingpay").value = "";
+                document.getElementById("jobcode-department").value = "";
+                document.getElementById("edit-jobcode-submit").disabled = true;
+            }
+        }
+    </script>
+}

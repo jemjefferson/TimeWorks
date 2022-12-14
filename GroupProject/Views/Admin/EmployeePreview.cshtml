@@ -1,0 +1,56 @@
+﻿@model Employee
+@{
+    Layout = null;
+}
+<div class="content-container">
+    <div id="EmployeePreview">
+    <table class="model-table white-back">
+        <tr class="blue-back white">
+            <th colspan="2">@Model.FirstName @Model.LastName</th>
+        </tr>
+        @{
+            int i = 1;
+        }
+        @foreach(EmployeeJobCode ejc in Model.EmployeeJobCodes){
+            string back = "";
+            if (i % 2 == 0){
+                back = "gray-back";
+            }
+            <tr class="@back">
+                @if (i == 1){
+                    <td>Job Codes</td>
+                } else{
+                    <td></td>
+                }
+
+                <td>@ejc.JobCode.JobTitle - @ejc.JobCode.Department</td>
+            </tr>
+
+            i++;
+        }
+
+        <tr>
+            <td>Employee ID</td>
+            <td>@Model.Id</td>
+        </tr>
+        @{
+            string status = "Offline";
+        }
+        <tr class="gray-back">
+            @foreach(EmployeeJobCode ejc in Model.EmployeeJobCodes) {
+                if (ejc.Active) {
+                    status = "Active";
+                }
+            }
+            <td colspan="2">STATUS<br /><input readonly value="@status" /></td>
+        </tr>
+    </table>
+
+    </div>
+    <div class="model-buttons-right">
+        <a class="btn blue-back white" role="button" asp-controller="admin" asp-action="EditEmployee" asp-route-id=@Model.Id>Edit Employee</a>
+        <a class="btn blue-back white" role="button" asp-controller="admin" asp-action="AddEmployee">Add Employee</a>
+        <a class="btn blue-back white" role="button" asp-controller="admin" asp-action="AddJobCode">Add Job Title</a>
+        <a class="btn blue-back white" role="button" asp-controller="admin" asp-action="EditJobCode">Edit Job Title</a>
+    </div>
+</div>

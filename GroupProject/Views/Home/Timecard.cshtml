@@ -1,0 +1,138 @@
+﻿@model Employee
+@{
+    double week1 = 0;
+    double week2 = 0;
+    double totalPay = 0;
+    PayPeriod payPeriod = ViewBag.PayPeriod;
+    List<PayPeriod> payPeriods = ViewBag.PayPeriods;
+}
+@if (Model != null){
+    <div class="content-container">
+        <div class="model-information full">
+            <div class="blue-back white timecard-header">Timecard - @Model.FirstName @Model.LastName</div>
+            <label class="white">Pay Period: </label>
+            <select onchange="location.href = this.value" id="PayPeriod" name="PayPeriod">
+                @foreach (PayPeriod item in payPeriods.OrderByDescending(p => p.Start))
+                {
+                    if (payPeriod.Start == item.Start)
+                    {
+                        <option selected value="/timecard/?payPeriod=@item.Id">@item.Start.ToString("M/d/yyyy") - @item.End.ToString("M/d/yyyy")</option>
+                    }
+                    else
+                    {
+                        <option value="/timecard/?payPeriod=@item.Id">@item.Start.ToString("M/d/yyyy") - @item.End.ToString("M/d/yyyy")</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="model-display full">
+            @for (int i = 0; i < 2; i++)
+            {
+                <table class="model-table white-back">
+                    <tr class="blue-back white">
+                        <th colspan="7">Timecard - Week @(i + 1)</th>
+                    </tr>
+                    <tr>
+                        <td class="column-header">Time Type</td>
+                        <td class="column-header">Job Code</td>
+                        <td class="column-header">Time In</td>
+                        <td class="column-header">Time Out</td>
+                        <td class="column-header">Total Time</td>
+                        <td class="column-header">Notes</td>
+                        <td class="column-header">Employee Approved</td>
+                    </tr>
+                    @if (Model.Hours != null){
+                        foreach (var hour in Model.Hours.Where(h => h.TimeIn >= payPeriod.Start.AddDays(i * 7) && h.TimeIn <= payPeriod.Start.AddDays(i * 7 + 7)))
+                        {
+                            double minutes = MiscUtil.GetTotalMinutes(hour);
+                            if (minutes > 0)
+                            {
+                                if (i == 0)
+                                {
+                                    week1 += minutes;
+                                }
+                                else
+                                {
+                                    week2 += minutes;
+                                }
+
+                                totalPay += hour.PayRate * minutes / 60;
+                            }
+
+                            string tout = hour.TimeOut == null ? "Clocked In" : ((DateTime)hour.TimeOut).ToString("h:mm tt") + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ((DateTime)hour.TimeOut).ToString("M/d");
+                            <tr>
+                                <td>Work</td>
+                                <td>@hour.EmployeeJobCode.JobCodeId - @hour.EmployeeJobCode.JobCode.JobTitle</td>
+                                <td>@hour.TimeIn.ToString("h:mm tt")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@hour.TimeIn.ToString("M/d")</td>
+                                <td>@Html.Raw(tout)</td>
+                                <td>@MiscUtil.GetFormattedHours(minutes)</td>
+                                <td class="break" ondblclick="editHourComment(@hour.Id)"><img class="table-image" src="~/Images/comment.png" /></td>
+                                <td>@((bool)hour.EmployeeApproved && hour.EmployeeApproved != null ? "Yes" : "No")</td>
+                            </tr>
+                            @foreach (var brk in hour.Breaks)
+                            {
+                                string bout = brk.EndTime == null ? "On Break" : ((DateTime)brk.EndTime).ToString("h:mm tt") + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ((DateTime)brk.EndTime).ToString("M/d");
+                                string total = brk.EndTime == null ? "On Break" : MiscUtil.GetFormattedHours(((DateTime)brk.EndTime - brk.StartTime).TotalMinutes);
+                                <tr class="gray-back">
+                                    <td class="break">@(brk.Paid ? "Paid Break" : "Break")</td>
+                                    <td class="break"></td>
+                                    <td class="break">@brk.StartTime.ToString("h:mm tt")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@brk.StartTime.ToString("M/d")</td>
+                                    <td class="break">@Html.Raw(bout)</td>
+                                    <td class="break">@total</td>
+                                    <td class="break" ondblclick="editBreakComment(@brk.Id)"><img class="table-image" src="~/Images/comment.png"></td>
+                                    <td class="break">@((bool)hour.EmployeeApproved && hour.EmployeeApproved != null ? "Yes" : "No")</td>
+                                </tr>
+                            }
+                        }
+                    }
+    
+                    <tr class="blue-back white">
+                        <td colspan="7">Total Week Hours: @(i == 0 ? MiscUtil.GetFormattedHours(week1) : MiscUtil.GetFormattedHours(week2))</td>
+                    </tr>
+                </table>
+            }
+            <div class="model-summary full">
+                <div class="pay-summary blue-back">
+                    <div class="full white">Total Paid Hours: @MiscUtil.GetFormattedHours(week1 + week2)</div>
+                    <div class="full green">Estimated Gross Pay: @totalPay.ToString("C")</div>
+                </div>
+                <div class="pay-submit">
+                    <button class="green-back white" onclick="approveEmployeeTimecard(@payPeriod.Id)">Approve Timecard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}else{
+    <div class="content-container"><div class="white">No Employee was found with that ID</div></div>
+}
+
+@section scripts {
+    <script>
+        function approveEmployeeTimecard(payPeriod) {
+            let ajax = new XMLHttpRequest();
+            ajax.onload = () => {
+                location.href = "/timecard/?payPeriod=" + payPeriod;
+                console.log("hello");
+            }
+
+            ajax.open("POST", "/ApproveTimecard?pid=" + payPeriod);
+            ajax.send();
+        }
+        function editHourComment(hid) {
+            let ajax = new XMLHttpRequest();
+            ajax.onload = () => {
+                document.body.insertAdjacentHTML("beforeend", ajax.responseText);
+            }
+            ajax.open("GET", "/EditHourComment/?hid=" + hid);
+            ajax.send();
+        }
+        function editBreakComment(bid) {
+            let ajax = new XMLHttpRequest();
+            ajax.onload = () => {
+                document.body.insertAdjacentHTML("beforeend", ajax.responseText);
+            }
+            ajax.open("GET", "/EditBreakComment/?bid=" + bid);
+            ajax.send();
+        }
+    </script>
+}

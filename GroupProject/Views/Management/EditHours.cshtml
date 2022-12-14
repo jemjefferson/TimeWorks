@@ -1,0 +1,64 @@
+﻿@model Hour
+@{
+    Layout = null;
+    Employee employee = ViewBag.Employee;
+    DateTime end = Model.TimeOut == null ? DateTime.Now.Date.AddHours(17) : (DateTime)Model.TimeOut;
+}
+<div class="obscure" onclick="removePopup(event, this)">
+    <div class="prompt" id="EditHours">
+        <div class="prompt-header">
+            <h2>@(Model.Id == 0 ? "Add" : "Edit") Hours</h2>
+        </div>
+        <div class="prompt-body">
+            <div class="prompt-input">
+            <label>Employee</label>
+            <select>
+                <option selected value="@employee.Id">@employee.FirstName @employee.LastName</option>
+            </select>
+            </div>
+            <div class="prompt-input">
+            <label>Start Date:</label>
+            <input type="date" value="@Model.TimeIn.ToString("yyyy-MM-dd")" id="StartDate" name="StartDate" />
+            </div>
+            <div class="prompt-input">
+            <label>Start Time:</label>
+            <input type="time" value="@Model.TimeIn.ToString("HH:mm:ss")" id="StartTime" name="StartTime" />
+            </div>
+            <div class="prompt-input">
+            <input type="checkbox" id="ClockedIn" name="ClockedIn" onchange="changeClocked(this.checked)" checked="@(Model.TimeOut == null)" /><label for="ClockedIn">Clocked In</label>
+            </div>
+            <div class="prompt-input">
+            <label>End Date:</label>
+            <input type="date" disabled="@(Model.TimeOut == null)" value="@end.ToString("yyyy-MM-dd")" id="EndDate" name="EndDate" />
+            </div>
+            <div class="prompt-input">
+            <label>End Time:</label>
+            <input type="time" disabled="@(Model.TimeOut == null)" value="@end.ToString("HH:mm:ss")" id="EndTime" name="EndTime" />
+            </div>
+            <div class="prompt-input">
+            <label>Job Code</label>
+            <select name="PayCode" id="PayCode">
+                @foreach(EmployeeJobCode code in employee.EmployeeJobCodes){
+                    if (Model.EmployeeJobCodeId == code.Id){
+                        <option selected value="@code.Id">@code.JobCode.JobTitle</option>
+                    } else{
+                        <option value="@code.Id">@code.JobCode.JobTitle</option>
+                    }
+                }
+            </select>
+            </div>
+            <div class="prompt-input">
+            <label>Comment:</label>
+            <textarea name="Comment" id="Comment" maxlength="250">@Model.Comment</textarea>
+            </div>
+            <div class="prompt-buttons">
+            <button class="gray-back" type="button" onclick="document.getElementById('EditHours').parentNode.remove()">Cancel</button>
+            <button class="green-back white" type="button" onclick="updateHours(@employee.Id, @Model.Id)">Save Hours</button>
+                @if(Model.Id != 0){
+                    <button class="red-back white" type="button" onclick="deleteHours(@employee.Id, @Model.Id)">Delete Hours</button>
+                }
+            <button class="blue-back white" type="button" onclick="editBreaks(@employee.Id, @Model.Id)">Edit Breaks</button>
+            </div>
+        </div>
+    </div>
+</div>

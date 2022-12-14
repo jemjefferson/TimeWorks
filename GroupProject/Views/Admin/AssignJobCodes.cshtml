@@ -1,0 +1,31 @@
+﻿@model Employee
+
+<h2 class="form-title">@Model.FirstName @Model.LastName - Job Codes</h2>
+
+<div>
+    <a asp-controller="Admin" asp-action="addemployeejobcode" asp-route-id="@Model.Id" id="AddEmployeeJobCode" class="btn btn-primary" role="button">Add</a>
+</div>
+<div>
+    <table class="model-table">
+        <tr>
+            <th>Employee Job Id</th>
+            <th>Job Title</th>
+            <th>Pay Rate</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+        @foreach (EmployeeJobCode jc in Model.EmployeeJobCodes)
+        {
+            <tr>
+                <td>@jc.Id</td>
+                <td>@jc.JobCode.JobTitle (@jc.JobCodeId)</td>
+                <td>@jc.PayRate</td>
+                <td>@jc.Active.ToString().ToUpper()</td>
+                <td><a asp-controller="admin" asp-action="editemployeejobcode" asp-route-id="@jc.Id">Edit</a></td>
+            </tr>
+        }
+    </table>
+    <p class="form-buttons">
+        <a asp-controller="Admin" asp-action="editemployee" asp-route-id="@Model.Id" class="btn btn-primary btn-cancel">Cancel</a>
+    </p>
+</div>

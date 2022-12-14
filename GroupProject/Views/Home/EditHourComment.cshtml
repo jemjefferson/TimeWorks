@@ -1,0 +1,22 @@
+﻿@model Hour
+@{
+    Layout = null;
+    Employee employee = ViewBag.Employee;
+}
+<div class="obscure" onclick="removePopup(event, this)">
+    <div class="prompt" id="EditHourComment">
+        <div class="prompt-body-comment">
+            <div class="prompt-header">
+                <h2>Hour Comment</h2>
+            </div>
+            <div class="prompt-input">
+            <label>Comment:</label>
+            <textarea name="Comment" id="CommentArea" maxlength="250">@Model.Comment</textarea>
+            </div>
+            <div class="prompt-buttons">
+                <button class="gray-back" type="button" onclick="document.getElementById('EditHourComment').parentNode.remove()">Cancel</button>
+            <button class="green-back white" type="button" onclick="updateHourComment(@Model.Id)">Save Comment</button>
+            </div>
+        </div>
+    </div>
+</div>

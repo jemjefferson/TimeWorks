@@ -1,0 +1,28 @@
+﻿@model JobCode
+<h2 class="form-title">Add Job Title</h2>
+<div class="form-horizontal">
+    <form class="form-area" method="post">
+        <div class="form-group">
+            <label asp-for="JobTitle"></label>
+            <input asp-for="JobTitle" class="form-control" />
+            <span asp-validation-for="JobTitle"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="StartingPay"></label>
+            <input asp-for="StartingPay" placeholder="0.00" class="form-control" />
+            <span asp-validation-for="StartingPay"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Department"></label>
+            <input asp-for="Department" class="form-control" />
+            <span asp-validation-for="Department"></span>
+        </div>
+        <div asp-validation-summary="All"></div>
+        <p class="form-buttons">
+            <button type="submit" class="btn btn-primary btn-submit" role="button">Add</button>
+        </p>
+        <p class="form-buttons">
+            <a asp-controller="Admin" asp-action="" class="btn btn-primary btn-cancel">Cancel</a>
+        </p>
+    </form>
+</div>

@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Employee>
+<div class="selection-pane">
+    <div class="selection-search full text-center blue-back white">
+        <input id="EmployeeSearch" class="blue-back white" placeholder="Employee Name" oninput="filterEmployees(this.value)" />
+    </div>
+    @foreach(Employee e in Model){
+        <div class="selection-item full" onclick="getTimecard(@e.Id, this)">@e.FirstName @e.LastName</div>
+    }
+</div>
+<div class="model-display" id="ManagementTimecard">
+
+</div>

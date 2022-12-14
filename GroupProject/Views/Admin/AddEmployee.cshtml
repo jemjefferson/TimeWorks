@@ -1,0 +1,73 @@
+﻿@model EmployeeViewModel;
+@{
+    int max = 0;
+    foreach (Employee e in Model.Employees)
+    {
+        max++;
+    }
+}
+<h2 class="form-title">New Employee</h2>
+<div class="form-horizontal">
+    <form class="form-area" method="post">
+
+<div class="form-group">
+    <label asp-for="Employee.FirstName"></label>
+    <input asp-for="Employee.FirstName" class="form-control" />
+    <span asp-validation-for="Employee.FirstName"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Employee.LastName"></label>
+    <input asp-for="Employee.LastName" class="form-control" />
+    <span asp-validation-for="Employee.LastName"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Employee.Address"></label>
+    <input asp-for="Employee.Address" class="form-control" />
+    <span asp-validation-for="Employee.Address"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Employee.City"></label>
+    <input asp-for="Employee.City" class="form-control" />
+    <span asp-validation-for="Employee.City"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Employee.State"></label>
+    <input asp-for="Employee.State" class="form-control" />
+    <span asp-validation-for="Employee.State"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Employee.Zip"></label>
+    <input asp-for="Employee.Zip" class="form-control" />
+    <span asp-validation-for="Employee.Zip"></span>
+</div>
+        <div class="form-group">
+            <label asp-for="Employee.Manager"></label>
+            <input asp-for="Employee.Manager" class="form-control" type="number" min="1" max="@max" />
+            <span asp-validation-for="Employee.Manager"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Employee.Login.UserName"></label>
+            <input asp-for="Employee.Login.UserName" class="form-control" />
+            <span asp-validation-for="Employee.Login.UserName"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Employee.Login.PasswordHash"></label>
+            <input asp-for="Employee.Login.PasswordHash" class="form-control" type="password"/>
+            <span asp-validation-for="Employee.Login.PasswordHash"></span>
+        </div>
+                <div class="form-group">
+            <label asp-for="Employee.Login.Admin"></label>
+            <input asp-for="Employee.Login.Admin" class="form-checkbox" type="checkbox"/>
+            <span asp-validation-for="Employee.Login.Admin"></span>
+        </div>
+        
+    <div asp-validation-summary="All"></div>
+        <p class="form-buttons">
+            <button type="submit" class="btn btn-primary btn-submit" role="button">Add</button>
+        </p>
+        <p class="form-buttons">
+            <a asp-controller="Admin" asp-action="" class="btn btn-primary btn-cancel">Cancel</a>
+        </p>
+    </form>
+</div>
+<span class="space"></span>

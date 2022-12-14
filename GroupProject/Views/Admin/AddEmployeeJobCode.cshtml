@@ -1,0 +1,61 @@
+﻿@model EmployeeJobCodeViewModel
+@{
+    int max = Model.JobCodes.Max(jc => jc.Id);
+    int min = Model.JobCodes.Min(jc => jc.Id);
+}
+
+<h2 class="form-title">Add Employee Job Code</h2>
+<div class="form-horizontal">
+    <form class="form-area" method="post">
+        @if (@ViewBag.ErrorMessage != null)
+        {
+            <div class="form-group">
+                <label class="field-validation-error">@ViewBag.ErrorMessage</label>
+            </div>
+        }
+        <div class="form-group">
+            <label asp-for="EmployeeJobCode.JobCodeId"></label>
+            <input asp-for="EmployeeJobCode.JobCodeId" class="form-control" min="@min" max="@max"/>
+            <span asp-validation-for="EmployeeJobCode.JobCodeId"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="EmployeeJobCode.Active"></label>
+            <input asp-for="EmployeeJobCode.Active" class="form-checkbox" type="checkbox" />
+            <span asp-validation-for="EmployeeJobCode.Active"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="EmployeeJobCode.PayRate"></label>
+            <input asp-for="EmployeeJobCode.PayRate" class="form-control" />
+            <span asp-validation-for="EmployeeJobCode.PayRate"></span>
+        </div>
+
+        <div asp-validation-summary="All"></div>
+        <p class="form-buttons">
+            <button type="submit" class="btn btn-primary btn-submit" role="button" asp-route-id="@Model.EmployeeId">Submit</button>
+        </p>
+        <p class="form-buttons">
+            <a asp-controller="Admin" asp-action="assignjobcodes" asp-route-id="@Model.EmployeeId" class="btn btn-primary btn-cancel">Cancel</a>
+        </p>
+    </form>
+    </div>
+    <div>
+    <table class="model-table">
+        <tr>
+            <th>Job Id</th>
+            <th>Job Title</th>
+            <th>Starting Pay</th>
+            <th>Department</th>
+            <th></th>
+        </tr>
+        @foreach (JobCode jc in Model.JobCodes)
+        {
+            <tr>
+                <td>@jc.Id</td>
+                <td>@jc.JobTitle</td>
+                <td>@jc.StartingPay</td>
+                <td>@jc.Department</td>
+            </tr>
+        }
+    </table>
+</div>
+<span class="space"></span>

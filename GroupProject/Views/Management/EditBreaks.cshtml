@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Break>
+@{
+    Layout = null;
+    Hour hour = ViewBag.Hour;
+    int eid = ViewBag.EID;
+}
+<div class="obscure" onclick="removePopup(event, this)">
+    <div class="prompt" id="EditBreaks">
+        <div class="prompt-header">
+            <h2>Edit Breaks</h2>
+        </div>
+        <div class="prompt-body">
+            <input type="hidden" id="NewBreakCount" value="0"/>
+            <table class="model-table" id="BreakTable">
+                <tr>
+                    <th>ID</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Comment</th>
+                    <th>Paid</th>
+                </tr>
+                @foreach(var brk in Model){
+                    string id = brk.Id.ToString();
+                    string startid = "Start" + id;
+                    string endid = "End" + id;
+                    string commentid = "Comment" + id;
+                    string paidid = "Paid" + id;
+                    DateTime end = brk.EndTime == null ? DateTime.Now : (DateTime)brk.EndTime;
+                    <tr class="select-row" onclick="selectRow(this)">
+                        <td>@id</td>
+                        <td><input type="time" value="@brk.StartTime.ToString("HH:mm:ss")" id="@startid" /></td>
+                        <td><input type="time" value="@end.ToString("HH:mm:ss")" id="@endid" /></td>
+                        <td><input value="@brk.Comment" id="@commentid"/></td>
+                        <td><input type="checkbox" checked="@brk.Paid" id="@paidid" /></td>
+                    </tr>
+                }
+            </table>
+            <div class="prompt-buttons">
+                <button class="blue-back white" type="button" onclick="updateBreaks(@eid, @hour.Id)">Save Breaks</button>
+                <button class="gray-back" type="button" onclick="document.getElementById('EditBreaks').parentNode.remove()">Cancel</button>
+                <button class="red-back white" style="margin-right: 100px" onclick="removeBreak()">Remove Break</button>
+                <button class="green-back white" type="button" onclick="addBreak()">Add Break</button>
+            </div>
+        </div>
+    </div>
+</div>

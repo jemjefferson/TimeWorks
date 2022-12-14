@@ -1,0 +1,27 @@
+﻿@model Employee
+
+<h2 class="form-title">@Model.FirstName @Model.LastName</h2>
+<form class="form-area" method="post">
+    <div class="form-group">
+    <table class="model-table">
+        <tr>
+            <th>Employee Job Id</th>
+            <th>Job Title</th>
+            <th></th>
+        </tr>
+        @foreach (EmployeeJobCode jc in Model.EmployeeJobCodes)
+        {
+            <tr>
+                <td>@jc.Id</td>
+                <td>@jc.JobCode.JobTitle (@jc.JobCodeId)</td>
+                <td><button type="button" onclick="clockIn(@jc.Id)" class="btn btn-primary btn-submit" role="button">SELECT</button></td>
+            </tr>
+        }
+    </table>
+    </div>
+    </form>
+    <div>
+    <p class="form-buttons">
+        <a asp-controller="" asp-action="" class="btn btn-primary btn-cancel">Cancel</a>
+    </p>
+</div>
