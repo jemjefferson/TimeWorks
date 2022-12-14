@@ -2912,9 +2912,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\200158214\\Desktop\\TimeWorks\\TimeWorks\\GroupProject.DataAccess\\GroupProject.DataAccess.csproj",
-      "projectName": "GroupProject.DataAccess",
-      "projectPath": "C:\\Users\\200158214\\Desktop\\TimeWorks\\TimeWorks\\GroupProject.DataAccess\\GroupProject.DataAccess.csproj",
+      "projectUniqueName": "C:\\Users\\200158214\\Desktop\\TimeWorks\\TimeWorks\\GroupProject.DataAccess\\TimeWorks.DataAccess.csproj",
+      "projectName": "TimeWorks.DataAccess",
+      "projectPath": "C:\\Users\\200158214\\Desktop\\TimeWorks\\TimeWorks\\GroupProject.DataAccess\\TimeWorks.DataAccess.csproj",
       "packagesPath": "C:\\Users\\200158214\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\200158214\\Desktop\\TimeWorks\\TimeWorks\\GroupProject.DataAccess\\obj\\",
       "projectStyle": "PackageReference",
