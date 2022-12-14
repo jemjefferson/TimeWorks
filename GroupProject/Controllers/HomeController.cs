@@ -92,9 +92,17 @@ public class HomeController : Controller
         return View(model);
     }
 
+    [HttpGet("approvetimecard")]
+    [Authorize]
+    public ActionResult ApproveTimecard(string pid)
+    {
+        ViewBag.PID = pid;
+        return View();
+    }
+
     [HttpPost("approvetimecard")]
     [Authorize]
-    public void ApproveTimecard(string pid)
+    public void ConfirmTimecard(string pid)
     {
         int e = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         int p = int.Parse(pid);
@@ -122,7 +130,8 @@ public class HomeController : Controller
     [Authorize]
     public IActionResult ClockIn(string jcid, string tz)
     {
-        int id = int.Parse(jcid);
+        int id = 0;
+        int.TryParse(jcid, out id);
         EmployeeJobCode jc = _dataService.GetEmployeeJobCode(id);
         Hour hour = new Hour { EmployeeId = jc.EmployeeId, EmployeeJobCodeId = jc.Id, PayRate = jc.PayRate, TimeIn = DateTime.UtcNow.AddMinutes(-int.Parse(tz)), TimeOut = null, TimeEntered = DateTime.Now, EmployeeApproved = false };
         if (!ModelState.IsValid)
@@ -142,7 +151,7 @@ public class HomeController : Controller
         int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         Employee e = _dataService.GetEmployee(userId);
 
-        if (DateTime.Now < e.Hours.OrderByDescending(h => h.TimeIn).First().TimeIn.AddMinutes(1))
+        if (DateTime.Now < e.Hours.OrderByDescending(h => h.TimeIn).Where(h => h.TimeOut == null).First().TimeIn.AddMinutes(1))
         {
             return Redirect("/");
         }

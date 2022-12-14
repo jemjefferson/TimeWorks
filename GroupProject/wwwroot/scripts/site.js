@@ -255,6 +255,16 @@ function clockOut() {
 function approveTimecard(emp) {
     let ajax = new XMLHttpRequest();
     ajax.onload = () => {
+        document.body.insertAdjacentHTML("beforeend", ajax.responseText);
+    }
+
+    ajax.open("GET", "/Management/ApproveTimecard?eid=" + emp);
+    ajax.send();
+}
+
+function confirmTimecard(emp) {
+    let ajax = new XMLHttpRequest();
+    ajax.onload = () => {
         getTimecard(emp, null);
     }
 
@@ -262,6 +272,25 @@ function approveTimecard(emp) {
     ajax.send();
 }
 
+function approveEmployeeTimecard(pid) {
+    let ajax = new XMLHttpRequest();
+    ajax.onload = () => {
+        document.body.insertAdjacentHTML("beforeend", ajax.responseText);
+    }
+
+    ajax.open("GET", "/ApproveTimecard?pid=" + pid);
+    ajax.send();
+}
+
+function confirmEmployeeTimecard(pid) {
+    let ajax = new XMLHttpRequest();
+    ajax.onload = () => {
+        location.href = document.getElementById("PayPeriod").value;
+    }
+
+    ajax.open("POST", "/ApproveTimecard?pid=" + pid);
+    ajax.send();
+}
 function selectedRow() {
     let rows = document.getElementsByClassName("selected");
     if (rows.length == 1) {
@@ -292,5 +321,23 @@ function updateBreakComment(bid) {
     }
 
     ajax.open("POST", '/UpdateBreakComment/?bid=' + bid + "&Comment=" + document.getElementById("CommentArea").value);
+    ajax.send();
+}
+
+function editHourComment(hid) {
+    let ajax = new XMLHttpRequest();
+    ajax.onload = () => {
+        document.body.insertAdjacentHTML("beforeend", ajax.responseText);
+    }
+    ajax.open("GET", "/EditHourComment/?hid=" + hid);
+    ajax.send();
+}
+
+function editBreakComment(bid) {
+    let ajax = new XMLHttpRequest();
+    ajax.onload = () => {
+        document.body.insertAdjacentHTML("beforeend", ajax.responseText);
+    }
+    ajax.open("GET", "/EditBreakComment/?bid=" + bid);
     ajax.send();
 }

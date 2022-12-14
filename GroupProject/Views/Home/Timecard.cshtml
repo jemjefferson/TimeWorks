@@ -1,11 +1,15 @@
 ﻿@model Employee
 @{
+    Layout = null;
     double week1 = 0;
     double week2 = 0;
     double totalPay = 0;
     PayPeriod payPeriod = ViewBag.PayPeriod;
     List<PayPeriod> payPeriods = ViewBag.PayPeriods;
 }
+<html>
+<partial name="_HeadPartial" model="Model"/>
+<body onload="getTime()">
 @if (Model != null){
     <div class="content-container">
         <div class="model-information full">
@@ -66,7 +70,7 @@
                                 <td>@hour.TimeIn.ToString("h:mm tt")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@hour.TimeIn.ToString("M/d")</td>
                                 <td>@Html.Raw(tout)</td>
                                 <td>@MiscUtil.GetFormattedHours(minutes)</td>
-                                <td class="break" ondblclick="editHourComment(@hour.Id)"><img class="table-image" src="~/Images/comment.png" /></td>
+                                <td class="break" onclick="editHourComment(@hour.Id)"><img class="table-image" src="~/Images/comment.png" /></td>
                                 <td>@((bool)hour.EmployeeApproved && hour.EmployeeApproved != null ? "Yes" : "No")</td>
                             </tr>
                             @foreach (var brk in hour.Breaks)
@@ -79,7 +83,7 @@
                                     <td class="break">@brk.StartTime.ToString("h:mm tt")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@brk.StartTime.ToString("M/d")</td>
                                     <td class="break">@Html.Raw(bout)</td>
                                     <td class="break">@total</td>
-                                    <td class="break" ondblclick="editBreakComment(@brk.Id)"><img class="table-image" src="~/Images/comment.png"></td>
+                                    <td class="break" onclick="editBreakComment(@brk.Id)"><img class="table-image" src="~/Images/comment.png"></td>
                                     <td class="break">@((bool)hour.EmployeeApproved && hour.EmployeeApproved != null ? "Yes" : "No")</td>
                                 </tr>
                             }
@@ -97,7 +101,11 @@
                     <div class="full green">Estimated Gross Pay: @totalPay.ToString("C")</div>
                 </div>
                 <div class="pay-submit">
-                    <button class="green-back white" onclick="approveEmployeeTimecard(@payPeriod.Id)">Approve Timecard</button>
+                    @if (payPeriod.End > DateTime.Now || Model.Hours.Where(h => h.PayPeriodId == payPeriod.Id).FirstOrDefault()?.EmployeeApproved == true){
+                        <button class="green-back white" style="opacity:0.6" disabled>Approve Timecard</button>
+                    } else{
+                        <button class="green-back white" onclick="approveEmployeeTimecard(@payPeriod.Id)">Approve Timecard</button>
+                    }
                 </div>
             </div>
         </div>
@@ -105,34 +113,6 @@
 }else{
     <div class="content-container"><div class="white">No Employee was found with that ID</div></div>
 }
-
-@section scripts {
-    <script>
-        function approveEmployeeTimecard(payPeriod) {
-            let ajax = new XMLHttpRequest();
-            ajax.onload = () => {
-                location.href = "/timecard/?payPeriod=" + payPeriod;
-                console.log("hello");
-            }
-
-            ajax.open("POST", "/ApproveTimecard?pid=" + payPeriod);
-            ajax.send();
-        }
-        function editHourComment(hid) {
-            let ajax = new XMLHttpRequest();
-            ajax.onload = () => {
-                document.body.insertAdjacentHTML("beforeend", ajax.responseText);
-            }
-            ajax.open("GET", "/EditHourComment/?hid=" + hid);
-            ajax.send();
-        }
-        function editBreakComment(bid) {
-            let ajax = new XMLHttpRequest();
-            ajax.onload = () => {
-                document.body.insertAdjacentHTML("beforeend", ajax.responseText);
-            }
-            ajax.open("GET", "/EditBreakComment/?bid=" + bid);
-            ajax.send();
-        }
-    </script>
-}
+<partial name="_FooterPartial" />
+</body>
+</html>

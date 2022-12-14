@@ -350,6 +350,10 @@ input:focus{
     text-align: center;
 }
 
+.profile {
+    font-size: 22px;
+}
+
 /* PopUps */
 
 div.popup {
@@ -388,7 +392,7 @@ div.prompt {
 
 #EditHourComment, #EditBreakComment {
     width: 40%;
-    height: 30%;
+    height: 35%;
 }
 
 .prompt-header {
@@ -428,12 +432,13 @@ div.prompt {
 
 .prompt-buttons{
     border-top: 1px solid #D0D0D0;
-    padding: 25px 15px;
+    padding: 10px 15px;
 }
 
 .prompt-buttons button{
     float:right;
     margin-right:15px;
+    margin-bottom: 10px;
 }
 
 #Comment, #CommentArea {

@@ -1,7 +1,12 @@
 ﻿@model Employee;
 @{
+    Layout = null;
     Hour hour = Model.Hours.Where(h => h.TimeIn.Date == DateTime.Now.Date).OrderByDescending(h => h.TimeIn).FirstOrDefault();
 }
+<html>
+<partial name="_HeadPartial" model="Model" />
+<body onload="getTime()">
+    
 <div class="content-container">
     <div class="home">
         <div class="full"><h2>Welcome!</h2></div>
@@ -42,14 +47,6 @@
         </table>
     </div>
 </div>
-@section scripts{
-    <script>
-        let counter = 0;
-        setInterval(() => {
-            counter++;
-            if (counter > 30){
-                location.reload();
-            }
-        }, 1000); 
-    </script>
-}
+<partial name = "_FooterPartial" />
+</body>
+</html>

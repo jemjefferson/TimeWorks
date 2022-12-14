@@ -1,5 +1,10 @@
 ﻿@model Employee
-
+@{
+    Layout = null;
+}
+<html>
+<partial name="_HeadPartial" model="Model"/>
+<body onload="getTime()">
 <h2 class="form-title">@Model.FirstName @Model.LastName</h2>
 <form class="form-area" method="post">
     <div class="form-group">
@@ -25,3 +30,6 @@
         <a asp-controller="" asp-action="" class="btn btn-primary btn-cancel">Cancel</a>
     </p>
 </div>
+<partial name="_FooterPartial" />
+</body>
+</html>

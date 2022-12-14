@@ -9,5 +9,6 @@ namespace GroupProject.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        public Employee? Employee { get; set; }
     }
 }

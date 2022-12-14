@@ -247,7 +247,7 @@ namespace GroupProject.Services
             Employee e = _dataContext.Employees.Include(jc => jc.EmployeeJobCodes).ThenInclude(h => h.Hours).FirstOrDefault(x => x.Id == hour.EmployeeId);
             EmployeeJobCode ejc = this.GetEmployeeJobCode(hour.EmployeeJobCodeId);
 
-            hour.PayPeriodId = _dataContext.PayPeriods.FirstOrDefault(x => x.End > hour.TimeIn && x.Start < hour.TimeIn).Id;
+            hour.PayPeriodId = _dataContext.PayPeriods.FirstOrDefault(x => x.End > hour.TimeIn && x.Start <= hour.TimeIn).Id;
 
             _dataContext.Hours.Add(hour);
             _dataContext.SaveChanges();
@@ -257,7 +257,7 @@ namespace GroupProject.Services
         {
             Employee e = _dataContext.Employees.Include(h => h.Hours).FirstOrDefault(x => x.Id == employeeId);
             EmployeeJobCode ejc = _dataContext.EmployeeJobCodes.FirstOrDefault(x => x.EmployeeId == employeeId && x.Active == true);
-            Hour h = e.Hours.Last();
+            Hour h = e.Hours.OrderByDescending(h => h.TimeIn).Where(h => h.TimeOut == null).First();
 
             Hour hour = this.GetHour(h.Id);
             hour.TimeOut = DateTime.UtcNow.AddMinutes(-int.Parse(tz));

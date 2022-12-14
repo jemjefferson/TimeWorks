@@ -21,7 +21,9 @@
                     }
                 }
             </select>
-            <button class="green-back white" style="float:right;margin-right: 50px;" type="button" onclick="editHours(@Model.Id, null)">Add Hours</button>
+            @if (Model.Hours.Where(h => h.PayPeriodId == payPeriod.Id).FirstOrDefault()?.ApprovedBy == null){
+                <button class="green-back white" style="float:right;margin-right: 50px;" type="button" onclick="editHours(@Model.Id, null)">Add Hours</button>
+            }
         </div>
         <div class="model-display full">
             @for (int i = 0; i < 2; i++)
@@ -54,15 +56,28 @@
                             }
 
                             string tout = hour.TimeOut == null ? "Clocked In" : ((DateTime)hour.TimeOut).ToString("h:mm tt") + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ((DateTime)hour.TimeOut).ToString("M/d");
-                            <tr ondblclick="editHours(@Model.Id, @hour.Id)">
-                                <td>Work</td>
-                                <td>@hour.EmployeeJobCode.JobCodeId - @hour.EmployeeJobCode.JobCode.JobTitle</td>
-                                <td>@hour.TimeIn.ToString("h:mm tt")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@hour.TimeIn.ToString("M/d")</td>
-                                <td>@Html.Raw(tout)</td>
-                                <td>@MiscUtil.GetFormattedHours(minutes)</td>
-                                <td class="break"><img class="table-image" src="~/Images/comment.png" /></td>
-                                <td>@(hour.ApprovedBy == null || hour.ApprovedBy == 0 ? "No" : "Yes")</td>
-                            </tr>
+                            @if (Model.Hours.Where(h => h.PayPeriodId == payPeriod.Id).FirstOrDefault()?.ApprovedBy == null)
+                            {
+                                <tr ondblclick="editHours(@Model.Id, @hour.Id)">
+                                    <td>Work</td>
+                                    <td>@hour.EmployeeJobCode.JobCodeId - @hour.EmployeeJobCode.JobCode.JobTitle</td>
+                                    <td>@hour.TimeIn.ToString("h:mm tt")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@hour.TimeIn.ToString("M/d")</td>
+                                    <td>@Html.Raw(tout)</td>
+                                    <td>@MiscUtil.GetFormattedHours(minutes)</td>
+                                    <td class="break" onclick="editHourComment(@hour.Id)"><img class="table-image" src="~/Images/comment.png" /></td>
+                                    <td>@(hour.ApprovedBy == null || hour.ApprovedBy == 0 ? "No" : "Yes")</td>
+                                </tr>
+                            } else{
+                                <tr>
+                                    <td>Work</td>
+                                    <td>@hour.EmployeeJobCode.JobCodeId - @hour.EmployeeJobCode.JobCode.JobTitle</td>
+                                    <td>@hour.TimeIn.ToString("h:mm tt")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@hour.TimeIn.ToString("M/d")</td>
+                                    <td>@Html.Raw(tout)</td>
+                                    <td>@MiscUtil.GetFormattedHours(minutes)</td>
+                                    <td class="break" onclick="editHourComment(@hour.Id)"><img class="table-image" src="~/Images/comment.png" /></td>
+                                    <td>@(hour.ApprovedBy == null || hour.ApprovedBy == 0 ? "No" : "Yes")</td>
+                                </tr>
+                            }
                             @foreach (var brk in hour.Breaks)
                             {
                                 string bout = brk.EndTime == null ? "On Break" : ((DateTime)brk.EndTime).ToString("h:mm tt") + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ((DateTime)brk.EndTime).ToString("M/d");
@@ -73,7 +88,7 @@
                                     <td class="break">@brk.StartTime.ToString("h:mm tt")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@brk.StartTime.ToString("M/d")</td>
                                     <td class="break">@Html.Raw(bout)</td>
                                     <td class="break">@total</td>
-                                    <td class="break"><img class="table-image" src="~/Images/comment.png" /></td>
+                                    <td class="break" onclick="editBreakComment(@brk.Id)"><img class="table-image" src="~/Images/comment.png" /></td>
                                     <td class="break">@(hour.ApprovedBy == null || hour.ApprovedBy == 0 ? "No" : "Yes")</td>
                                 </tr>
                             }
@@ -91,7 +106,8 @@
                     <div class="full green">Estimated Gross Pay: @totalPay.ToString("C")</div>
                 </div>
                 <div class="pay-submit">
-                    @if (payPeriod.End > DateTime.Now || Model.Hours.First().ApprovedBy != null){
+                    @if (payPeriod.End > DateTime.Now || Model.Hours.Where(h => h.PayPeriodId == payPeriod.Id).FirstOrDefault()?.ApprovedBy != null)
+                    {
                         <button class="green-back white" disabled style="opacity:0.6">Approve Timecard</button>
                     } else{
                         <button class="green-back white" onclick="approveTimecard(@Model.Id)">Approve Timecard</button>

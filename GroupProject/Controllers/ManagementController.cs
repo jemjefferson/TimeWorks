@@ -194,9 +194,18 @@ namespace GroupProject.Controllers
             _dataService.RemoveHour(hour);
         }
 
+        [HttpGet("approvetimecard")]
+        [Authorize(Roles ="Admin, Management")]
+        public ActionResult ApproveTimecard(string eid, string pid)
+        {
+            ViewBag.EID = eid;
+            ViewBag.PID = pid;
+            return View();
+        }
+
         [HttpPost("approvetimecard")]
         [Authorize(Roles = "Admin, Management")]
-        public void ApproveTimecard(string eid, string pid)
+        public void ConfirmTimecard(string eid, string pid)
         {
             int e = int.Parse(eid);
             int p = int.Parse(pid);

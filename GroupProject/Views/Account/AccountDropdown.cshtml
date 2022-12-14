@@ -5,6 +5,7 @@
 {
     <div id="AccountDropdown" class="popup dropdown white-back">
         <div class="dropdown-header">@User.Identity.Name</div>
+        <div class="dropdown-item" onclick="location.href = '/Account/profile'">My Profile</div>
         <div class="dropdown-item" onclick="location.href = '/Account/change-password'">Change Password</div>
         <div class="dropdown-item" onclick="location.href = '/Account/sign-out'">Log Out</div>
     </div>

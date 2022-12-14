@@ -1,0 +1,18 @@
+﻿@{
+    Layout = null;
+    string eid = ViewBag.EID;
+}
+<div class="obscure" onclick="removePopup(event, this)">
+    <div class="prompt" id="ApproveTimecard">
+        <div class="prompt-header">
+            <h2>Confirm Approval</h2>
+        </div>
+        <div class="prompt-body" style="padding:5px 15px">
+            Are you sure you want to approve this timecard?
+            <div class="prompt-buttons" style="padding-bottom: 15px">
+                <button class="gray-back" type="button" onclick="document.getElementById('ApproveTimecard').parentNode.remove()">Cancel</button>
+                <button class="green-back white" type="button" onclick="confirmTimecard(@eid); document.getElementById('ApproveTimecard').parentNode.remove()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>

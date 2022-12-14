@@ -117,13 +117,17 @@ namespace GroupProject.Controllers
         public IActionResult ChangePassword()
         {
             PasswordChangeViewModel pcvm = new PasswordChangeViewModel();
-
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            pcvm.Employee = _dataService.GetEmployee(userId);
             return View(pcvm);
         }
 
         [HttpPost("change-password"), Authorize]
         public IActionResult ChangePassword(PasswordChangeViewModel pcvm)
         {
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            pcvm.Employee = _dataService.GetEmployee(userId);
+
             if (!ModelState.IsValid)
             {
                 pcvm = new PasswordChangeViewModel();
@@ -131,7 +135,6 @@ namespace GroupProject.Controllers
                 return View(pcvm);
             }
 
-            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             Login login = _dataService.GetLogin(userId);
 
             PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
@@ -140,6 +143,18 @@ namespace GroupProject.Controllers
             _dataService.UpdatePassword(login);
 
             return RedirectToAction("Logout", "Account");
+        }
+
+        [HttpGet("profile"), Authorize]
+        public IActionResult Profile()
+        {
+            ProfileViewModel pvm = new ProfileViewModel();
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            pvm.Employee = _dataService.GetEmployee(userId);
+            pvm.Employee.Login = _dataService.GetLogin(userId);
+            pvm.Manager = _dataService.GetEmployee(pvm.Employee.Manager);
+
+            return View(pvm);
         }
     }
 }

@@ -1,0 +1,52 @@
+﻿@model ProfileViewModel
+@{
+    Layout = null;
+}
+<html>
+<partial name="_HeadPartial" model="Model.Employee" />
+<body onload="getTime()">
+<h1 class="form-title">Profile Information</h1>
+<div class="form-horizontal">
+    <form class="form-area">
+        <div class="form-group">
+            <br />
+            <h2>Basic Employee Information</h2>
+            <br />
+        </div>
+        <div class="form-group profile">
+            <p><strong>Username:</strong> @Model.Employee.Login.UserName</p>
+        </div>
+        <div class="form-group profile">
+            <p><strong>Name:</strong> @Model.Employee.FirstName @Model.Employee.LastName</p>
+        </div>
+        <div class="form-group profile">
+            <p><strong>Address:</strong> @Model.Employee.Address, @Model.Employee.City, @Model.Employee.State @Model.Employee.Zip</p>
+        </div>
+        <div class="form-group profile">
+            <p><strong>Manager Name:</strong> @Model.Manager.FirstName @Model.Manager.LastName</p>
+        </div>
+        <div class="form-group">
+            <br />
+            <h2>Assigned Job Titles</h2>
+            <br />
+        </div>
+        <div class="form-group profile">
+            @if (Model.Employee.EmployeeJobCodes != null)
+            {
+                <ul>
+                    @foreach (EmployeeJobCode e in Model.Employee.EmployeeJobCodes)
+                    {
+                        <li><strong>@e.JobCode.JobTitle, @e.JobCode.Department</strong></li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p><strong>There are no assigned job titles at this time...</strong></p>
+            }
+        </div>
+    </form>
+</div>
+<partial name="_FooterPartial" />
+</body>
+</html>
