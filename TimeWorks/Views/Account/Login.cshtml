@@ -7,23 +7,33 @@
 	<form class="form-area" method="post">
 		<div class="form-group">
 			<label asp-for="UserName"></label>
-			<input asp-for="UserName" class="form-control" />
+			<input asp-for="UserName" class="form-control" id="user"/>
 			<span asp-validation-for="UserName"></span>
 		</div>
 		<div class="form-group">
 			<label asp-for="Password"></label>
-			<input asp-for="Password" class="form-control" />
+			<input asp-for="Password" class="form-control" id="password"/>
 			<span asp-validation-for="Password"></span>
 		</div>
 
 		<div asp-validation-summary="All"></div>
 
 		<p class="form-buttons">
-			<button type="submit" class="btn btn-primary btn-submit" role="button">Login</button>
+			<button type="submit" class="btn btn-primary btn-submit" id="submit" role="button">Login</button>
 		</p>
 		<p class="form-buttons">
 			<a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-cancel">Cancel</a>
 		</p>
 	</form>
+	<p id="guestP" onclick="guest()" style="text-align:center;color:#AAD8E6;text-decoration:underline;cursor:pointer">Continue as guest</p>
 
 </div>
+<script>
+	function guest(){
+		let user = document.getElementById('user');
+		user.setAttribute('value', 'test');
+		let password = document.getElementById('password');
+		password.setAttribute('value', 'password');
+		document.getElementById('submit').click();
+	}
+</script>
