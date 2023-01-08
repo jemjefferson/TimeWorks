@@ -42,6 +42,7 @@ public class HomeController : Controller
 
         string status = "Clocked Out";
         var lastHour = _dataService.GetHours().Where(h => h.EmployeeId == e.Id && h.TimeIn < DateTime.Now.Date.AddDays(1)).OrderByDescending(h => h.TimeIn).FirstOrDefault();
+
         if (lastHour.TimeOut == null)
         {
             var lastBreak = _dataService.GetBreaks().Where(h => h.HourId == lastHour.Id).OrderByDescending(h => h.StartTime).FirstOrDefault();
